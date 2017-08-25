@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Dark Sky Demo 2</title>
+		<title>Forecast.io Demo</title>
 	</head>
 	<body>
 		<style type="text/css">
@@ -12,6 +12,28 @@
 
 			td.temp{
 				text-align: right;
+			}
+
+			.tempbar{
+				background-color:orange;
+				width:80px;
+				height:18px;
+				position:relative;
+				background: linear-gradient(to right, #88f0fc 0%,#f7c785 100%);
+			}
+
+			.mintemp, .maxtemp{
+				color:black;
+				position:absolute;
+				margin: 0 2px;
+			}
+
+			.mintemp{
+				left:0;
+			}
+
+			.maxtemp{
+				right:0;
 			}
 
 		</style>
@@ -40,15 +62,40 @@
 					// forecast data?
 					// loop through the data
 
+					var days = ["Sun","Mon","Tues","Wed","Thurs","Fri","Sat"];
+
 					for (var i = 0; i < data.daily.data.length; i++) {
 						var f = data.daily.data[i]; // the data for one day in the forecast
 						// first create a tr 
 						var row = $("<tr>");
 						var date = new Date(f.time*1000); // get the forecast data time and convert it to a JS date
-						row.append("<td>" +  date.toDateString() + "</td>");
+
+						if (i == 0){ // today
+							row.append("<td>Today</td>");
+						} else if (i == 1){ // tomorrow
+							row.append("<td>Tomorrow</td>");
+						} else {
+							row.append("<td>" + days[date.getDay()] + "</td>");
+						}
+						
 						row.append("<td>" + f.summary + "</td>");
-						row.append("<td class='temp'>" + Math.round(f.temperatureMin) + "&deg;C</td>");
-						row.append("<td class='temp'>" + Math.round(f.temperatureMax) + "&deg;C</td>");
+						
+						var temprange = $("<td class='temprange'>");
+
+						var tempbar = $("<div class='tempbar'>");
+						tempbar.append("<span class='mintemp'>" + Math.round(f.temperatureMin) +"</span>");
+						tempbar.append("<span class='maxtemp'>" + Math.round(f.temperatureMax) +"</span>");
+
+						var tempstart = -5; // start value of the temperature scale
+						var tempscale = 10; // 10 pixels per degree
+						var mintemp = Math.round(f.temperatureMin);
+						var maxtemp = Math.round(f.temperatureMax);
+
+						tempbar.css("left", (mintemp - tempstart)*tempscale + "px");
+						tempbar.css("width", (maxtemp - mintemp)*tempscale + "px");
+
+						temprange.append(tempbar);
+						row.append(temprange);
 
 						// append the tr to the table
 						$("#forecast").append(row);
@@ -65,7 +112,7 @@
 		<div id="currently"></div>
 
 		<table id="forecast">
-			<tr><th>date</th><th>summary</th><th>min</th><th>max</th></tr>
+			<tr><th>date</th><th>summary</th></tr>
 
 
 		</table>
