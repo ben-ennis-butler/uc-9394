@@ -1,0 +1,51 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+        
+		<script type="text/javascript">
+			$(document).ready(function(){
+                
+                //set API key from Dark Sky
+                var key = "3badb28e46dbeff33b41f55ae6781555";
+                
+                //https://api.darksky.net/forecast/3badb28e46dbeff33b41f55ae6781555/-35.343784,149.082977?units=si
+                
+                //set URL for API call
+                var url = "https://api.darksky.net/forecast/" + key + "/-35.343784,149.082977?units=si";
+               
+                //now lets go get the data
+                $.getJSON(url, function(data){
+                    
+                    console.log(data);
+                    
+                    //create a new date object with data from the API
+                    // date object info here: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date
+                    
+                    var now = new Date(data.currently.time*1000);
+                    
+                    //get our new date object and convert it to a date string and a time string
+                    var time = $("<h1>").text("At: " + now.toDateString() + ", " + now.toTimeString() );
+                    
+                    //append the new variable (time) to the page
+                    $("body").append(time);
+                    
+                    //get summary from API
+                    var summary = $("<h2>").text("Currently: " + data.currently.summary );
+                    
+                    //append the summary to the page
+                    $("body").append(summary);
+                    
+                    //round the temperature to a nice value
+                    var nicetemp = Math.round(data.currently.temperature);
+                    
+                    //get temperature
+                    var temp = $("<h2>").html("Temp: " + nicetemp + "&deg;C" );
+                    
+                    //append the summary to the page
+                    $("body").append(temp);
+
+                    
+                    
+                });
+                
+			});
+
+		</script>

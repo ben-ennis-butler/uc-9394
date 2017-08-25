@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Dark Sky Demo 1</title>
+	</head>
+	<body>
+		<script   src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                
+                //my secret key
+                var key = '3badb28e46dbeff33b41f55ae6781555';
+                
+                //api call
+                var url = 'https://api.darksky.net/forecast/' + key + '/-35.28346,149.12807?units=auto';
+                
+                $.get(url, function(data){
+                    console.log(data); 
+                    
+                    //create new date object
+                    var now = new Date(data.currently.time*1000);
+                    
+                    //get date and display
+                    var time = $("<h1>").text("At: " + now.toDateString() + ", " + now.toTimeString() );
+                    
+                    //add to body
+                    $("body").append(time);
+                    
+                    //get current temp
+                    var currently = $("<h2>").html("Currently: " + data.currently.temperature + "&deg;C");
+                    
+                    //add it to body
+                    $("body").append(currently);
+                    
+                    //get the summary from API
+                    var summary = $("<h2>").text("Summary: " + data.currently.summary);
+                    
+                    //add it to body
+                    $("body").append(summary);
+                    
+                });
+                
+                
+            });
+        </script>
+	</body>
+</html>
