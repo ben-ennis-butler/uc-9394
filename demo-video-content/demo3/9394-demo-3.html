@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Forecast.io Demo</title>
+		<title>Dark Sky Demo 3</title>
 	</head>
 	<body>
 		<style type="text/css">
@@ -37,13 +37,16 @@
 			}
 
 		</style>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-
-				var key = "3badb28e46dbeff33b41f55ae6781555";
-
-				var url = "https://api.darksky.net/forecast/" + key + "/-35.2760,149.1344?units=si";
+		<script   src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                
+                //my secret key
+                var key = '3badb28e46dbeff33b41f55ae6781555';
+                
+                //api call
+                var url = 'https://api.darksky.net/forecast/' + key + '/-35.28346,149.12807?units=auto';
 
 				$.get(url, function(data){
 

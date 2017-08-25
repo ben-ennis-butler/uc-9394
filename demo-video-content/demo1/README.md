@@ -1,13 +1,14 @@
-#Video 1: Introduction to the API
-This video shows how to access the Forecast.io API in your web browser, how to pass in parameters, and how to interpret the JSON data response
+# Video 1: API to HTML
+This video takes you from API data to simple HTML, using jQuery to load data and build HTML dynamically. 
 
-##Before You Start
+## Before You Start
 
 To follow along with this video you will need:
 
-- An API key for the DarkSky API - you can register here: https://darksky.net/dev/register
+- An API key for the DarkSky API - you can register [here](https://darksky.net/dev/register)
 - A text editor 
-- A JSON viewer plugin for your browser - here's one for Chrome (https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc?hl=en) and one for Safari (https://github.com/rfletcher/safari-json-formatter/downloads)
+- A JSON viewer plugin for your browser - here's one for [Chrome](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc?hl=en) and one for [Safari](https://github.com/rfletcher/safari-json-formatter/downloads)
+- [jQuery CDN](https://code.jquery.com/)
 
-##Video
+## Video
 Available via Echo360
