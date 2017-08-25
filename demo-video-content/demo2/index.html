@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<title>Dark Sky Demo 2</title>
+        
+        <style>
+            td.temp {
+                text-align: right;
+            }
+        </style>
+        
+	</head>
+	<body>
+		<script   src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                
+                //my secret key
+                var key = '3badb28e46dbeff33b41f55ae6781555';
+                
+                //api call
+                var url = 'https://api.darksky.net/forecast/' + key + '/-35.28346,149.12807?units=auto';
+                
+                $.get(url, function(data){
+                    //console.log(data); 
+                    
+                    //create new date object
+                    var now = new Date(data.currently.time*1000);
+                    
+                    //get date and display
+                    var time = $("<h1>").text("At: " + now.toDateString() + ", " + now.toTimeString() );
+                    
+                    //add to body
+                    $("#currently").append(time);
+                    
+                    //get current temp
+                    var currently = $("<h2>").html("Currently: " + data.currently.temperature + "&deg;C");
+                    
+                    //add it to body
+                    $("#currently").append(currently);
+                    
+                    //get the summary from API
+                    var summary = $("<h2>").text("Summary: " + data.currently.summary);
+                    
+                    //add it to body
+                    $("#currently").append(summary);
+                    
+                    //loop through the data and add it the table
+                    //new row for each new item
+                    
+                    for (var i = 0; i < data.daily.data.length; i++) {
+                        var f = data.daily.data[i];// the data for one day in the forecast
+                        
+                        console.log(f);
+                        
+                        var row = $("<tr>");
+                        var date = new Date(f.time*1000);
+                        
+                        row.append("<td>" + date.toDateString() + "</td>");
+                        row.append("<td>" + f.summary + "</td>");
+                        row.append("<td class='temp'>" + Math.round(f.temperatureMin) + "&deg;C</td>");
+                        row.append("<td class='temp'>" + Math.round(f.temperatureMax) + "&deg;C</td>");
+                        
+                        //append the tr info to the table
+                        $("#forecast").append(row);
+                        
+                    }
+                    
+                    
+                    
+                });
+
+            });
+        </script>
+        
+        <div id="currently"></div>
+        
+        <div >
+            <table id="forecast">
+                <tr><th>date</th><th>summary</th><th>min</th><th>max</th></tr>
+            
+            </table>
+        
+        
+        </div>
+        
+	</body>
+</html>
