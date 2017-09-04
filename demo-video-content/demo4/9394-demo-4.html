@@ -1,0 +1,176 @@
+<html>
+
+<head>
+    <title>Dark Sky Demo 3</title>
+</head>
+
+<body>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            width: 60%;
+            margin: 0 auto;
+        }
+        
+        td.temp {
+            text-align: right;
+        }
+        
+        .tempbar {
+            background-color: orange;
+            width: 80px;
+            height: 18px;
+            position: relative;
+            background: linear-gradient(to right, #88f0fc 0%, #f7c785 100%);
+        }
+        
+        .mintemp,
+        .maxtemp {
+            color: black;
+            position: absolute;
+            margin: 0 2px;
+        }
+        
+        .mintemp {
+            left: 0;
+        }
+        
+        .maxtemp {
+            right: 0;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //create variable for new location information
+            var newLocation = '';
+
+            //now get browser geo location
+            if (navigator.geolocation) {
+                
+                //log the data returned through the browser geolocation api
+                console.log(navigator.geolocation)
+
+                //if able to retrive current location
+                function success(pos) {
+                    var crd = pos.coords;
+                    
+                    console.log('Your current position is:');
+                    console.log('Latitude : ' + crd.latitude);
+                    console.log('Longitude: ' + crd.longitude);
+                    console.log('More or less ' + crd.accuracy + ' meters.');
+                    
+                    //set the newLocation variable to be in the correct format for the darksky api
+                    newLocation = crd.latitude + ',' + crd.longitude;
+
+                    //call function to get darksky api data with newLocation variable
+                    getWeatherData(newLocation);
+
+                };
+                
+                //if there is an error returning the geolocation then you should identify it and resolve it
+                function error(err) {
+                    console.warn('ERROR(' + err.code + '): ' + err.message);
+                };
+
+                //this is the line that actually prompts the user for their location
+                navigator.geolocation.getCurrentPosition(success, error);
+
+            } else {
+                //if the browser doesn't support gelocation then you need to do some testing
+                ShowError(); 
+            }
+
+
+        });
+
+        //function that retrieves data from api
+        function getWeatherData(currentLocation) {
+
+            //my secret key - update to yours
+            var key = '3badb28e46dbeff33b41f55ae6781555';
+
+            //set default location - canberra
+            var defaultLocation = '-35.28346,149.12807';
+
+            //api call
+            var url = 'https://api.darksky.net/forecast/' + key + '/' + currentLocation + '?units=auto';
+            $.get(url, function(data) {
+
+                var now = new Date(data.currently.time * 1000);
+                // create a Date object, with data from the API
+
+                var time = $("<h1>").text("At: " + now.toDateString() + ", " + now.toTimeString());
+                $("#currently").append(time); // stick it to the body
+
+                var h = $("<h1>").text("Currently: " + data.currently.summary);
+                $("#currently").append(h); // stick it to the body
+
+                var t = $("<h2>").html("Temp: " + data.currently.temperature + "&deg;C");
+                $("#currently").append(t); // stick it to the body
+
+                
+                // forecast data
+                //covered in demo 3
+                
+                var days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+                // loop through the data
+                for (var i = 0; i < data.daily.data.length; i++) {
+                    var f = data.daily.data[i]; // the data for one day in the forecast
+                    // first create a tr 
+                    var row = $("<tr>");
+                    var date = new Date(f.time * 1000); // get the forecast data time and convert it to a JS date
+
+                    if (i == 0) { // today
+                        row.append("<td>Today</td>");
+                    } else if (i == 1) { // tomorrow
+                        row.append("<td>Tomorrow</td>");
+                    } else {
+                        row.append("<td>" + days[date.getDay()] + "</td>");
+                    }
+
+                    row.append("<td>" + f.summary + "</td>");
+
+                    var temprange = $("<td class='temprange'>");
+
+                    var tempbar = $("<div class='tempbar'>");
+                    tempbar.append("<span class='mintemp'>" + Math.round(f.temperatureMin) + "</span>");
+                    tempbar.append("<span class='maxtemp'>" + Math.round(f.temperatureMax) + "</span>");
+
+                    var tempstart = -5; // start value of the temperature scale
+                    var tempscale = 10; // 10 pixels per degree
+                    var mintemp = Math.round(f.temperatureMin);
+                    var maxtemp = Math.round(f.temperatureMax);
+
+                    tempbar.css("left", (mintemp - tempstart) * tempscale + "px");
+                    tempbar.css("width", (maxtemp - mintemp) * tempscale + "px");
+
+                    temprange.append(tempbar);
+                    row.append(temprange);
+
+                    // append the tr to the table
+                    $("#forecast").append(row);
+
+                };
+
+            });
+        };
+
+    </script>
+
+    <div id="currently"></div>
+
+    <table id="forecast">
+        <tr>
+            <th>date</th>
+            <th>summary</th>
+        </tr>
+
+
+    </table>
+
+</body>
+
+</html>
